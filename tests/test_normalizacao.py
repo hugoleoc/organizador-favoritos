@@ -1,5 +1,17 @@
 # Importa a função que vamos implementar em src/organizador.py
-from src.organizador import normalizar_url
+from src.organizador import normalizar_url, remover_duplicatas
+
+def test_remove_duplicatas_mantem_primeira_ocorrencia():
+    # Duas URLs que só diferem por http/https e utm_* devem virar uma só
+    favoritos = [
+        {"titulo": "Página A", "url": "http://site.com/pagina/"},
+        {"titulo": "Página A (cópia)", "url": "https://site.com/pagina?utm_source=x"},
+        {"titulo": "Outra", "url": "https://site.com/outra"},
+    ]
+    resultado = remover_duplicatas(favoritos)
+    assert len(resultado) == 2
+    assert resultado[0]["titulo"] == "Página A"
+
 
 def test_http_vira_https():
     # http e https do mesmo endereço devem ser tratados como iguais

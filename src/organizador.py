@@ -63,6 +63,29 @@ def normalizar_url(url):
     # Monta a URL final; o fragmento (#...) é descartado, pois não muda a página no servidor
     return urlunsplit((esquema, dominio, caminho, query, ""))
 
+def remover_duplicatas(favoritos):
+    """Retorna a lista de favoritos sem URLs duplicadas, mantendo a primeira ocorrência."""
+
+    # Lista que vai receber apenas os favoritos únicos, na ordem original
+    resultado = []
+
+    # Conjunto com as URLs normalizadas já vistas; consulta em set é rápida
+    vistas = set()
+
+    for item in favoritos:
+        # Padroniza a URL antes de comparar, para que variações contem como iguais
+        chave = normalizar_url(item["url"])
+
+        # Se a URL já apareceu, este favorito é duplicado e é ignorado
+        if chave in vistas:
+            continue
+
+        # Primeira ocorrência: registra a URL como vista e guarda o favorito
+        vistas.add(chave)
+        resultado.append(item)
+
+    return resultado
+
 # Bloco executado apenas quando o arquivo é rodado diretamente
 if __name__ == "__main__":
     itens = ler_favoritos(CAMINHO_ENTRADA)

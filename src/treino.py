@@ -34,6 +34,7 @@ def treinar():
     y = tabela["categoria"]
 
     # Pipeline une TF-IDF e regressão logística, para o vetorizador ser ajustado só nos dados de treino de cada dobra
+    # TF-IDF (Term Frequency - Inverse Document Frequency), medida estatística usada em PLN e recuperação de informação
     modelo = make_pipeline(
         TfidfVectorizer(ngram_range=(1, 2)),
         LogisticRegression(max_iter=1000, class_weight="balanced"),

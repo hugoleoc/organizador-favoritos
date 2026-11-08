@@ -17,6 +17,22 @@ PALAVRAS_CHAVE = {
 # Categoria usada quando nenhuma palavra-chave corresponde
 CATEGORIA_PADRAO = "Sem categoria"
 
+# Regra mais forte: domínios que já indicam o tema da página
+# Esta tabela é consultada antes das palavras-chave
+DOMINIO_CATEGORIA = {
+    "cifraclub.com.br": "Arte",
+    "escolavirtual.gov.br": "Educação",
+    "jusbrasil.com.br": "Leis",
+    "legislacao.prefeitura.sp.gov.br": "Leis",
+    "graphisoft.com": "Arquitetura",
+    "helpcenter.graphisoft.com": "Arquitetura",
+    "education.graphisoft.com": "Arquitetura",
+    "archdaily.com": "Arquitetura",
+    "linkedin.com": "Trabalho",
+    "uol.com.br": "Comunicação",
+    "cpubenchmark.net": "Computação",
+}
+
 
 def ler_favoritos(caminho):
     """Lê o arquivo HTML e retorna uma lista de dicionários com título e URL."""

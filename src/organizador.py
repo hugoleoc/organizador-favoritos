@@ -1,5 +1,7 @@
 # Biblioteca que interpreta HTML e facilita a busca de tags
 from bs4 import BeautifulSoup
+# No topo do arquivo, junto ao import do BeautifulSoup:
+from urllib.parse import urlsplit, urlunsplit, parse_qsl, urlencode
 
 # Caminho do arquivo exportado pelo Chrome, relativo à raiz do projeto
 CAMINHO_ENTRADA = "dados/favoritos.html"
@@ -32,6 +34,34 @@ def ler_favoritos(caminho):
 
     return favoritos
 
+def normalizar_url(url):
+    """Retorna a forma padronizada de uma URL para detecção de duplicatas."""
+
+    # Separa a URL em partes: esquema, domínio, caminho, query e fragmento
+    partes = urlsplit(url)
+
+    # http e https são tratados como o mesmo endereço; ambos viram https
+    esquema = "https"
+
+    # O domínio não diferencia maiúsculas de minúsculas, então padronizamos
+    dominio = partes.netloc.lower()
+
+    # Remove a barra final, exceto quando o caminho é só "/"
+    caminho = partes.path
+    if len(caminho) > 1 and caminho.endswith("/"):
+        caminho = caminho.rstrip("/")
+
+    # Lê os parâmetros da query como pares (chave, valor)
+    parametros = parse_qsl(partes.query, keep_blank_values=True)
+
+    # Mantém só os parâmetros que não são de rastreamento (utm_*)
+    parametros_uteis = [(k, v) for k, v in parametros if not k.startswith("utm_")]
+
+    # Recria a query, sem alterar a ordem original dos parâmetros
+    query = urlencode(parametros_uteis)
+
+    # Monta a URL final; o fragmento (#...) é descartado, pois não muda a página no servidor
+    return urlunsplit((esquema, dominio, caminho, query, ""))
 
 # Bloco executado apenas quando o arquivo é rodado diretamente
 if __name__ == "__main__":

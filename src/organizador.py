@@ -6,6 +6,17 @@ from urllib.parse import urlsplit, urlunsplit, parse_qsl, urlencode
 # Caminho do arquivo exportado pelo Chrome, relativo à raiz do projeto
 CAMINHO_ENTRADA = "dados/favoritos.html"
 
+# Palavras-chave por categoria; a ordem define a prioridade na classificação
+PALAVRAS_CHAVE = {
+    "Arquitetura": ["arquitetura", "projeto", "bim", "urbanismo", "construção"],
+    "Computação": ["python", "github", "programação", "software", "dados"],
+    "IA": ["inteligência artificial", "machine learning", "llm"],
+    "Educação": ["curso", "aula", "tutorial", "educação"],
+}
+
+# Categoria usada quando nenhuma palavra-chave corresponde
+CATEGORIA_PADRAO = "Sem categoria"
+
 
 def ler_favoritos(caminho):
     """Lê o arquivo HTML e retorna uma lista de dicionários com título e URL."""
@@ -85,6 +96,21 @@ def remover_duplicatas(favoritos):
         resultado.append(item)
 
     return resultado
+
+def classificar(favorito):
+    """Retorna a categoria do favorito, com base em palavras-chave do título e do domínio."""
+
+    # Junta título e domínio em um único texto, em minúsculas, para comparar
+    texto = (favorito["titulo"] + " " + urlsplit(favorito["url"]).netloc).lower()
+
+    # Percorre as categorias na ordem definida em PALAVRAS_CHAVE
+    for categoria, palavras in PALAVRAS_CHAVE.items():
+        # Se alguma palavra-chave aparecer no texto, esta é a categoria
+        if any(palavra in texto for palavra in palavras):
+            return categoria
+
+    # Nenhuma palavra-chave encontrada: usa a categoria de fallback
+    return CATEGORIA_PADRAO
 
 # Bloco executado apenas quando o arquivo é rodado diretamente
 if __name__ == "__main__":

@@ -1,8 +1,9 @@
-# Bibilioteca que interpreta o HTML e facilita a busca de tags
-from  bs4 import BeautifulSoup
+# Biblioteca que interpreta HTML e facilita a busca de tags
+from bs4 import BeautifulSoup
 
-# Caminho do arquivo exportado pelo Chrome, relativo a raiz do projeto
+# Caminho do arquivo exportado pelo Chrome, relativo à raiz do projeto
 CAMINHO_ENTRADA = "dados/favoritos.html"
+
 
 def ler_favoritos(caminho):
     """Lê o arquivo HTML e retorna uma lista de dicionários com título e URL."""
@@ -23,15 +24,16 @@ def ler_favoritos(caminho):
         if not url:
             continue
 
-        # Guarda o titúlo (texto do link) e a URL em um dicionário
+        # Guarda o título (texto do link) e a URL em um dicionário
         favoritos.append({
-            "titulo": link.get_text(strip=True), # strip=True remove espaços extras
+            "titulo": link.get_text(strip=True),  # strip=True remove espaços extras
             "url": url,
         })
 
     return favoritos
 
-# Bloco executado, apenas quando o arquivo é rodado diretamente
+
+# Bloco executado apenas quando o arquivo é rodado diretamente
 if __name__ == "__main__":
     itens = ler_favoritos(CAMINHO_ENTRADA)
     print(f"Total de favoritos lidos: {len(itens)}")
